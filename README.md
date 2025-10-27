@@ -1,3 +1,6 @@
+# NOTICE
+If you want to make it connect into Totentanz servers, after building the apk: replace the libmadomagi_native.so inside it with the one from https://magi-reco.com/totentanz-1.0.0.apk, it should work.
+
 # Magia Translate
 [![Discord Chat](https://img.shields.io/discord/665980614998097941.svg)](https://discord.gg/6vncnjj)  
 This is the client source code for Magia Translate, an English translation modification for Magia Record JP. It is licenced under the GNU General Public License v3.0.
