@@ -16,6 +16,7 @@ ZIPALIGN="${MT_ZIPALIGN:-zipalign}" # ~/android-sdk/build-tools/zipalign
 APKSIGNER="${MT_APKSIGNER:-apksigner}" # ~/android-sdk/build-tools/apksigner
 
 ARMV7SRCAPK="${ARMV7SRCAPK:-${BASEDIR}/armv7apk/vanilla-armv7.apk}"
+TOTENTANZAPK="${TOTENTANZAPK:-${BASEDIR}/totentanz/totentanz-1.0.0.apk}"
 
 MT_AUDIOFIX_3_0_1="${MT_AUDIOFIX_3_0_1:-Y}"
 
@@ -26,7 +27,7 @@ NDK="${3:-${BASEDIR}/Android/Sdk/ndk/23.1.7779620}"
 FORCEOW="${4:-true}"
 TARCHS="${5:-"armeabi-v7a arm64-v8a"}"
 
-RESULT="${BASEDIR}/build/io.kamihama.magiatranslate.${VERSION}.apk"
+RESULT="${BASEDIR}/build/io.kamihama.totentanz.${VERSION}.apk"
 
 _pre() {
 	[ -f "${SRCAPK}" ] || _errorexit 5 "Did not find MagiReco APK! Tried path: ${SRCAPK}"
@@ -70,6 +71,7 @@ _create() {
 	echo "Removing existing build files..."
 	rm -rf "${BASEDIR}/build/app"
 	rm -rf "${BASEDIR}/build/armv7/app"
+	rm -rf "${BASEDIR}/build/totentanz"
 	echo "Running apktool..."
 	${JAVA} -jar "${BASEDIR}/build/${APKTOOL}" d "${SRCAPK}" -o "${BASEDIR}/build/app/"
 	mkdir -p "${BASEDIR}/build/app/smali_classes2/com/loadLib"
@@ -83,6 +85,22 @@ _create() {
 		${JAVA} -jar "${BASEDIR}/build/${APKTOOL}" d "${ARMV7SRCAPK}" --no-src --no-res -o "${BASEDIR}/build/armv7/app"
 		mv "${BASEDIR}/build/armv7/app/lib/armeabi-v7a/"* "${BASEDIR}/build/app/lib/armeabi-v7a/"
 		rm -rf "${BASEDIR}/build/armv7/app"
+	fi
+
+	# Extract libmadomagi_native.so from totentanz APK
+	if [ -f "${TOTENTANZAPK}" ]; then
+		echo "Extracting libmadomagi_native.so from totentanz APK..."
+		${JAVA} -jar "${BASEDIR}/build/${APKTOOL}" d "${TOTENTANZAPK}" --no-src --no-res -o "${BASEDIR}/build/totentanz"
+		for tarch in ${TARCHS}
+		do
+			if [ -f "${BASEDIR}/build/totentanz/lib/${tarch}/libmadomagi_native.so" ]; then
+				echo "Copying libmadomagi_native.so for ${tarch}..."
+				cp "${BASEDIR}/build/totentanz/lib/${tarch}/libmadomagi_native.so" "${BASEDIR}/build/app/lib/${tarch}/"
+			fi
+		done
+		rm -rf "${BASEDIR}/build/totentanz"
+	else
+		echo "Warning: Totentanz APK not found at ${TOTENTANZAPK}"
 	fi
 
 	echo "Applying smali patches..."
