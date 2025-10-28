@@ -57,6 +57,7 @@ jobs:
         path: |
           apk
           armv7apk
+          totentanz
         key: ${{ runner.os }}-cached-src-apk-${{ hashFiles('ci_versions/src_apk.sh') }}
     - name: Download source APK
       if: steps.restore-cached-src-apk.outputs.cache-hit != 'true'
@@ -69,6 +70,7 @@ jobs:
         path: |
           apk
           armv7apk
+          totentanz
         key: ${{ runner.os }}-cached-src-apk-${{ hashFiles('ci_versions/src_apk.sh') }}
     - name: Run ci_build.sh
       run: ./ci_build.sh

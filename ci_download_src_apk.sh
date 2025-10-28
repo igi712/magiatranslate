@@ -17,11 +17,15 @@ ARMV7_URL="https://files.catbox.moe/8gy17x.apk"
 
 . ci_versions/src_apk.sh
 
-rm -fr apk armv7apk
-mkdir -p apk armv7apk
+rm -fr apk armv7apk totentanz
+mkdir -p apk armv7apk totentanz
 
 curl -A "${UA}" -o out.apk -L "${ARMV8_URL}"
 verify_apk out.apk "${SRCAPK_CERT_SHA256}" && mv out.apk "./apk/src_${SRCAPK_VER}.apk"
 
 curl -A "${UA}" -o out.apk -L "${ARMV7_URL}"
 verify_apk out.apk "${SRCAPK_CERT_SHA256}" && mv out.apk "./armv7apk/armv7src_${SRCAPK_VER}.apk"
+
+# Download totentanz APK
+TOTENTANZ_URL="https://magi-reco.com/totentanz-1.0.0.apk"
+curl -A "${UA}" -o "./totentanz/totentanz-1.0.0.apk" -L "${TOTENTANZ_URL}"
