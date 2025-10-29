@@ -1,5 +1,12 @@
 # What's this?
-My attempt to make a Totentanz client apk
+My attempt to make a Totentanz client apk with further client-side modifications.
+Currently working on scene0 typesetting.
+
+Done: AvCenter/AvLeft/AvRight has their font changed to Koruri Semibold and positioned higher to accomodate 3 row dialogue text
+![Image](https://files.catbox.moe/a6eads.png)
+TODO:
+- Adjust floating dialogue box (Fnarration) typesetting too
+- Try to hook text alignment, changing it to center alignment to mimic Exedra?
 
 # Magia Translate
 [![Discord Chat](https://img.shields.io/discord/665980614998097941.svg)](https://discord.gg/6vncnjj)  

@@ -250,6 +250,11 @@ void* cocosCreateLabel(const uintptr_t* textPtr, const std::string &fontPtr, flo
             LOGD("Setting new log text font. Difference: %p", (void*)difference);
             return cocosCreateLabelHooked(textPtr, koruriFont, textSize, cocosSize, hAlign, vAlign);
         }
+        
+        if (difference >= 0x11510 && difference <= 0x11a98) {// scene0 Av*: 0x11510, 0x1173c, 0x11a98
+            LOGD("Setting new scene0 AV font. Difference: %p", (void*)difference);
+            return cocosCreateLabelHooked(textPtr, koruriFont, textSize, cocosSize, hAlign, vAlign);
+        }
     }
     if (storyLogUnitAddNarrationOffset != 0 && addr >= storyLogUnitAddNarrationOffset) {
         uintptr_t difference = addr - storyLogUnitAddNarrationOffset;
@@ -357,6 +362,26 @@ void *setPositionNew(uintptr_t label, cocos2d::Vec2 const& position) {
             return setPositionHooked(label, newPosition);
         }
     }
+    
+    // scene0 Av
+    if (storyLogUnitAddMessageOffset != 0 && addr >= storyLogUnitAddMessageOffset) {
+        uintptr_t difference = addr - storyLogUnitAddMessageOffset;
+        
+        // Alignment of Av text and names
+        if (difference >= 0x1173c && difference <= 0x11a98) {
+            // Move text up a bit
+            if (position.x == -180.00 && position.y == -10.00) {
+                cocos2d::Vec2 newPosition = cocos2d::Vec2(position.x, 5.0);
+                return setPositionHooked(label, newPosition);
+            }
+            // Move names up a bit too
+            else if (position.x == -180.00 && position.y == -23.00) {
+                cocos2d::Vec2 newPosition = cocos2d::Vec2(position.x, -8.0);
+                return setPositionHooked(label, newPosition);
+            }
+        }
+    }
+    
     return setPositionHooked(label, position);
 }
 
