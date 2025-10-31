@@ -3,10 +3,14 @@ My attempt to make a Totentanz client apk with further client-side modifications
 Currently working on scene0 typesetting.
 
 Done: 
-- AvCenter/AvLeft/AvRight has their font changed to Koruri Semibold and positioned higher to accomodate 3 row dialogue text (font size = 20)
+scene0 stuff:
+- AvCenter/AvLeft/AvRight has their font changed to Koruri Semibold and positioned higher to accomodate 3 row dialogue text (if font size = 20)
 ![Image](https://files.catbox.moe/uz3t19.png)
-- Adjusted floating dialogue box (Fnarration) font to Koruri Semibold and change font size to 20
+- Adjusted floating dialogue box (Fnarration) font to Koruri Semibold
 ![Image](https://files.catbox.moe/g11hq7.png)
+
+TODO:
+- any suggestions pls
 
 # Magia Translate
 [![Discord Chat](https://img.shields.io/discord/665980614998097941.svg)](https://discord.gg/6vncnjj)  
