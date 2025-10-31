@@ -443,11 +443,20 @@ cocos2d::Size lbGetViewPositionNew(float x, float y) {
     if (storyCharaUnitonTextHomeOffset != 0 && addr >= storyCharaUnitonTextHomeOffset) {      
         if (difference <= 0x1300) {
             auto oldx = x;
-            auto oldy = y;
-            if (x > -100.0) {
+            auto oldy = y;            
+            if (x >= -130.0 && x <= -110.0) { // Homescreen single unit
+                x = -105.0;
+            }
+            else if (x >= 30.0 && x <= 50.0) { // Homescreen dual unit
                 x = -120.0;
             }
-            if (x == -100.0) {
+            else if (x >= 0.0 && x <= 20.0) { // Homescreen single unit, center
+                x = 25;
+            }
+            else if (x >= 180.0 && x <= 200.0) { // Homescreen dual unit, center
+                x = 25;
+            }
+            else if (x == -100.0) { // Dunno what's this for
                 x = -250.0;
             }
             x = x - 30.0;
