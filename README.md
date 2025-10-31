@@ -14,7 +14,7 @@ Story:
 ![Image](https://files.catbox.moe/4gyxac.png)
 
 Homescreen:
-- Fixed center subtitle position
+- Fixed subtitle positions for centered/other positions in homescreen
 ![Image](https://files.catbox.moe/apf9bu.png)
 
 # Magia Translate
