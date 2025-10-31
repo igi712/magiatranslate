@@ -5,17 +5,17 @@ Modifications:
 
 scene0 stuff:
 - AvCenter/AvLeft/AvRight has their font changed to Koruri Semibold and positioned higher to accomodate 3 row dialogue text (if font size <= 20)
-![Image](https://files.catbox.moe/uz3t19.png)
+![Image](https://files.catbox.moe/0u27qo.png)
 - Adjusted floating dialogue box (Fnarration) font to Koruri Semibold
-![Image](https://files.catbox.moe/vco6ab.png)
+![Image](https://files.catbox.moe/43fi0r.png)
 
 Story:
 - Name font changed to Koruri Semibold with NA font size
-![Image](https://files.catbox.moe/x66h0s.png)
+![Image](https://files.catbox.moe/4gyxac.png)
 
 Homescreen:
 - Fixed center subtitle position
-![Image](https://files.catbox.moe/d87ucf.png)
+![Image](https://files.catbox.moe/apf9bu.png)
 
 # Magia Translate
 [![Discord Chat](https://img.shields.io/discord/665980614998097941.svg)](https://discord.gg/6vncnjj)  
