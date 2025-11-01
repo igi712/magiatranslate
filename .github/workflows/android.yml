@@ -71,6 +71,7 @@ jobs:
         KS_PASS: ${{ secrets.KS_PASS }}
         KS_KEY_ALIAS: ${{ secrets.KS_KEY_ALIAS }}
         KEY_PASS: ${{ secrets.KEY_PASS }}
+        MT_TOTENDOMAIN: ${{ secrets.TOTENDOMAIN }}
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:

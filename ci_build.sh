@@ -24,7 +24,6 @@ MT_VER=$(grep -P -o "(?<=^#define MT_VERSION )\d+$" src/Config.h)
 . ci_versions/src_apk.sh
 SRCAPK="${BASEDIR}/apk/src_${SRCAPK_VER}.apk"
 export ARMV7SRCAPK="${BASEDIR}/armv7apk/armv7src_${SRCAPK_VER}.apk"
-export TOTENTANZAPK="${BASEDIR}/totentanz/totentanz-1.0.0.apk"
 VERSION="v${SRCAPK_VER}_v${MT_VER}"
 
 # load deps versions

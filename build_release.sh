@@ -15,8 +15,9 @@ APKTOOL="${MT_APKTOOL:-apktool_2.6.0.jar}"
 ZIPALIGN="${MT_ZIPALIGN:-zipalign}" # ~/android-sdk/build-tools/zipalign
 APKSIGNER="${MT_APKSIGNER:-apksigner}" # ~/android-sdk/build-tools/apksigner
 
+TOTENDOMAIN="${MT_TOTENDOMAIN:-android.magi-reco.com}"
+
 ARMV7SRCAPK="${ARMV7SRCAPK:-${BASEDIR}/armv7apk/vanilla-armv7.apk}"
-TOTENTANZAPK="${TOTENTANZAPK:-${BASEDIR}/totentanz/totentanz-1.0.0.apk}"
 
 MT_AUDIOFIX_3_0_1="${MT_AUDIOFIX_3_0_1:-Y}"
 
@@ -87,21 +88,12 @@ _create() {
 		rm -rf "${BASEDIR}/build/armv7/app"
 	fi
 
-	# Extract libmadomagi_native.so from totentanz APK
-	if [ -f "${TOTENTANZAPK}" ]; then
-		echo "Extracting libmadomagi_native.so from totentanz APK..."
-		${JAVA} -jar "${BASEDIR}/build/${APKTOOL}" d "${TOTENTANZAPK}" --no-src --no-res -o "${BASEDIR}/build/totentanz"
-		for tarch in ${TARCHS}
-		do
-			if [ -f "${BASEDIR}/build/totentanz/lib/${tarch}/libmadomagi_native.so" ]; then
-				echo "Copying libmadomagi_native.so for ${tarch}..."
-				cp "${BASEDIR}/build/totentanz/lib/${tarch}/libmadomagi_native.so" "${BASEDIR}/build/app/lib/${tarch}/"
-			fi
-		done
-		rm -rf "${BASEDIR}/build/totentanz"
-	else
-		echo "Warning: Totentanz APK not found at ${TOTENTANZAPK}"
-	fi
+	# Adjust server domain name
+	# Note: ideally we should also replace te-data.magi-reco.com in classes.dex, but Capricieux server covers that for now
+	for tarch in ${TARCHS}
+	do
+		sed -i "s|android\.magi-reco\.com|${TOTENDOMAIN}|g" "${BASEDIR}/build/app/lib/${tarch}/libmadomagi_native.so"
+	done
 
 	echo "Applying smali patches..."
 	local PATCHES=(
