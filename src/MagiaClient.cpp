@@ -257,11 +257,6 @@ void* cocosCreateLabel(const uintptr_t* textPtr, const std::string &fontPtr, flo
             LOGD("Setting new log text font. Difference: %p", (void*)difference);
             return cocosCreateLabelHooked(textPtr, koruriFont, textSize, cocosSize, hAlign, vAlign);
         }
-        
-        if (difference >= 0x11510 && difference <= 0x11a98) {// 0x11510, 0x1173c, 0x11a98
-            LOGD("Setting new scene0 AV font. Difference: %p", (void*)difference);
-            return cocosCreateLabelHooked(textPtr, koruriFont, textSize, cocosSize, hAlign, vAlign);
-        }
     }
     if (storyLogUnitAddNarrationOffset != 0 && addr >= storyLogUnitAddNarrationOffset) {
         uintptr_t difference = addr - storyLogUnitAddNarrationOffset;
@@ -270,7 +265,17 @@ void* cocosCreateLabel(const uintptr_t* textPtr, const std::string &fontPtr, flo
             return cocosCreateLabelHooked(textPtr, koruriFont, textSize, cocosSize, hAlign, vAlign);
         }
     }
-    if (storyLogUnitAddMessageOffset != 0 && addr < storyLogUnitAddMessageOffset) {
+    // scene0 hooks, I shouldn't have used storyLogUnitAddMessageOffset but lol it works
+    if (storyLogUnitAddMessageOffset != 0 && addr >= storyLogUnitAddMessageOffset) {
+        uintptr_t difference = addr - storyLogUnitAddMessageOffset;
+        
+        if (difference >= 0x11510 && difference <= 0x11a98) {// 0x11510, 0x1173c, 0x11a98
+            LOGD("Setting new scene0 AV font. Difference: %p", (void*)difference);
+            return cocosCreateLabelHooked(textPtr, koruriFont, textSize, cocosSize, hAlign, vAlign);
+        }
+    }
+    if (storyLogUnitAddMessageOffset != 0 && addr < storyLogUnitAddMessageOffset) { 
+        // unlike others this has negative offset...
         uintptr_t difference = storyLogUnitAddMessageOffset - addr;
         if (difference >= 0xc700 && difference <= 0xca00) { // 0xc714, 0xc9c8
             LOGD("Setting new scene0 FNarration font. Difference: %p", (void*)difference);
