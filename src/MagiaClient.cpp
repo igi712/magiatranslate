@@ -148,6 +148,12 @@ int *sceneLayerManagerCreateSceneLayer(uintptr_t *sceneLayerManager, BaseSceneLa
                     MT_VERSION, ver);
                     displayMessage("Totentanz Update", updateMessage.c_str());
                 }
+
+                auto importantMessage = rest.GetEndpointImportantMessage();
+                if (!importantMessage.empty()) {
+                    displayMessage("Totentanz Message", importantMessage);
+                }
+
                 auto endpointUrl = rest.GetEndpointUrl();
                 if (endpointUrl.empty()) {
                     LOGW("Empty endpoint URL.");

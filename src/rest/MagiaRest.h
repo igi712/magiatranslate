@@ -21,6 +21,8 @@ class MagiaRest {
 
         std::string GetEndpointUrl();
 
+        std::string GetEndpointImportantMessage();
+
         std::string GetEndpointError();
         int GetEndpointVersion();
 
