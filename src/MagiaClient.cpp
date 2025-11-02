@@ -127,16 +127,16 @@ int *sceneLayerManagerCreateSceneLayer(uintptr_t *sceneLayerManager, BaseSceneLa
         switch(rest.Endpoint()) {
             case MAGIAREST_EMPTY:
             {
-                auto emptyMessage = string_format("Unable to connect to the translation server. Restart the app to retry, or continue to play in Japanese. (Response length: %zu)", 
+                auto emptyMessage = string_format("Unable to connect to the server. Restart the app to retry. (Response length: %zu)",
                 rest.EndpointStringLength());
 
-                displayMessage("MagiaTranslate Error", emptyMessage.c_str());
+                displayMessage("Totentanz Error", emptyMessage.c_str());
                 break;
             }
             case MAGIAREST_ERROR:
             {
-                auto errorMessage = string_format("An error has occurred. Restart the app to retry, or continue to play in Japanese.\nError: %s", rest.GetEndpointError().c_str());
-                displayMessage("MagiaTranslate Error", errorMessage.c_str());
+                auto errorMessage = string_format("An error has occurred. Restart the app to retry.\nError: %s", rest.GetEndpointError().c_str());
+                displayMessage("Totentanz Error", errorMessage.c_str());
                 break;
             }
             case MAGIAREST_SUCCESS:
@@ -144,14 +144,14 @@ int *sceneLayerManagerCreateSceneLayer(uintptr_t *sceneLayerManager, BaseSceneLa
                 auto ver = rest.GetEndpointVersion();
                 if (MT_VERSION < ver) {
                     LOGI("Version update required.");
-                    auto updateMessage = string_format("A new version of MagiaTranslate is available, please update your app at kamihama.io. Continuing may result in crashes.\nApp version installed: %d\nApp version available: %d",
+                    auto updateMessage = string_format("A new version of Totentanz is available, please update your app. Continuing may result in crashes.\nApp version installed: %d\nApp version available: %d",
                     MT_VERSION, ver);
-                    displayMessage("MagiaTranslate Update", updateMessage.c_str());
+                    displayMessage("Totentanz Update", updateMessage.c_str());
                 }
                 auto endpointUrl = rest.GetEndpointUrl();
                 if (endpointUrl.empty()) {
                     LOGW("Empty endpoint URL.");
-                    displayMessage("MagiaTranslate Error", "Error 115 has occurred, the returned translate endpoint URL is empty, please try again later.");
+                    displayMessage("Totentanz Error", "An error has occured. Please try again later.");
                     break;
                 }
 
@@ -187,7 +187,7 @@ int *sceneLayerManagerCreateSceneLayer(uintptr_t *sceneLayerManager, BaseSceneLa
     }
 
     return sceneLayerManagerCreateSceneLayerOld(sceneLayerManager, sceneLayerInfo);
-    
+
 }
 
 // Change function to fetch resource URLs
@@ -268,7 +268,7 @@ void* cocosCreateLabel(const uintptr_t* textPtr, const std::string &fontPtr, flo
     // scene0 hooks, I shouldn't have used storyLogUnitAddMessageOffset but lol it works
     if (storyLogUnitAddMessageOffset != 0 && addr >= storyLogUnitAddMessageOffset) {
         uintptr_t difference = addr - storyLogUnitAddMessageOffset;
-        
+
         if (difference >= 0x11510 && difference <= 0x11a98) {// 0x11510, 0x1173c, 0x11a98
             LOGD("Setting new scene0 AV font. Difference: %p", (void*)difference);
             return cocosCreateLabelHooked(textPtr, koruriFont, textSize, cocosSize, hAlign, vAlign);
@@ -290,17 +290,17 @@ void* cocosCreateLabel(const uintptr_t* textPtr, const std::string &fontPtr, flo
 void *setPositionNew(uintptr_t label, cocos2d::Vec2 const& position) {
     uintptr_t addr = reinterpret_cast<uintptr_t>(__builtin_extract_return_addr(__builtin_return_address(0)));
     //LOGI("Move at %p to x: %.2f, y: %.2f", (addr - libBase), position.x, position.y);
-    
+
     // Story message boxes
     if (storyMessageUnitStartOffset != 0 && addr >= storyMessageUnitStartOffset) {
         uintptr_t difference = addr - storyMessageUnitStartOffset;
-        
+
         // Alignment of main text in box
         if (difference <= 0x200) { // Offset = 0x76 as of 2.15
             LOGD("Moving story text.");
             //LOGI("Difference: %p", difference);
             //LOGD("old [message] x: %.2f, y: %.2f", position.x, position.y);
-            
+
             // Move text to the left and up a bit
             if (position.x == -222.0 && position.y == 20.0) {
                 cocos2d::Vec2 newPosition = cocos2d::Vec2(-368.0, 25.0);
@@ -313,16 +313,16 @@ void *setPositionNew(uintptr_t label, cocos2d::Vec2 const& position) {
                 return setPositionHooked(label, newPosition);
             }
         }
-        
-    }  
 
-    
+    }
+
+
     // Names alignment
     if (storyMessageUnitCreateMessageAreaOffset != 0 && addr >= storyMessageUnitCreateMessageAreaOffset) {
-            
+
         uintptr_t difference = addr - storyMessageUnitCreateMessageAreaOffset;
         //LOGI("Difference: %p", difference);
-        
+
         // Move names into the right place
         if (difference <= 0x600) { // Offset = 0x35e as of 2.15
             //LOGD("old [name] x: %.2f, y: %.2f", position.x, position.y);
@@ -343,9 +343,9 @@ void *setPositionNew(uintptr_t label, cocos2d::Vec2 const& position) {
                 return setPositionHooked(label, newPosition);
             }
         }
-        
+
     }
-    
+
     // History
     if (storyLogUnitAddMessageOffset != 0 && addr >= storyLogUnitAddMessageOffset) {
         uintptr_t difference = addr - storyLogUnitAddMessageOffset;
@@ -381,11 +381,11 @@ void *setPositionNew(uintptr_t label, cocos2d::Vec2 const& position) {
             return setPositionHooked(label, newPosition);
         }
     }
-    
+
     // scene0 Av
     if (storyLogUnitAddMessageOffset != 0 && addr >= storyLogUnitAddMessageOffset) {
         uintptr_t difference = addr - storyLogUnitAddMessageOffset;
-        
+
         // Alignment of Av text and names
         if (difference >= 0x1173c && difference <= 0x11a98) {
             // Move text up a bit
@@ -400,7 +400,7 @@ void *setPositionNew(uintptr_t label, cocos2d::Vec2 const& position) {
             }
         }
     }
-    
+
     return setPositionHooked(label, position);
 }
 
@@ -408,11 +408,11 @@ void *setMaxLineWidthNew(uintptr_t label, float length) {
     //LOGI("Hook triggered - line length");
     uintptr_t addr = reinterpret_cast<uintptr_t>(__builtin_extract_return_addr(__builtin_return_address(0)));
     //LOGI("%p", (addr - libBase));
-    
+
     if (storyMessageUnitCreateMessageAreaOffset != 0 && addr >= storyMessageUnitCreateMessageAreaOffset) {
         uintptr_t difference = addr - storyMessageUnitCreateMessageAreaOffset;
         //LOGI("Difference: %p", difference);
-        
+
         // Make lines longer
         if (difference <= 0x244 && length == 410.0) { // Offset = 0x144 as of 2.15
             LOGD("Set line length from 410.0 to 810.0");
@@ -426,13 +426,13 @@ void *setDimensionsNew(uintptr_t label, float width, float height) {
     uintptr_t addr = reinterpret_cast<uintptr_t>(__builtin_extract_return_addr(__builtin_return_address(0)));
     uintptr_t difference = addr - storyLogUnitAddMessageOffset;
     //LOGI("Difference [dimensions]: %p, addr: %p", difference, addr);
-    
+
     if (storyLogUnitAddMessageOffset != 0 && addr >= storyLogUnitAddMessageOffset) {
         //LOGI("%p, %.2f, %.2f", label, width, a3);
         if (difference <= 0x900 && width == 410.0) { // Offset = 0x5ac as of 2.15
             LOGD("Set dimensions for log from 410.0 to 710.0.");
             return setDimensionsHooked(label, 710.0, height);
-        }            
+        }
     }
     //LOGD("Dimensions: %f, %f", width, height);
     return setDimensionsHooked(label, width, height);
@@ -444,12 +444,12 @@ cocos2d::Size lbGetViewPositionNew(float x, float y) {
     uintptr_t addr = reinterpret_cast<uintptr_t>(__builtin_extract_return_addr(__builtin_return_address(0)));
     uintptr_t difference = addr - storyCharaUnitonTextHomeOffset;
     //LOGD("Difference (viewPos): %p, addr: %p", (void*)difference, (void*)addr);
-    
-    if (storyCharaUnitonTextHomeOffset != 0 && addr >= storyCharaUnitonTextHomeOffset) {      
+
+    if (storyCharaUnitonTextHomeOffset != 0 && addr >= storyCharaUnitonTextHomeOffset) {
         if (difference <= 0x1300) {
             auto oldx = x;
-            auto oldy = y;    
-            // Homescreen        
+            auto oldy = y;
+            // Homescreen
             if (x >= -130.0 && x <= -110.0) { // -120 = Homescreen single unit
                 x = -105.0;
             }
@@ -466,12 +466,12 @@ cocos2d::Size lbGetViewPositionNew(float x, float y) {
             else if ((x >= 170.0 && x <= 180.0)
             || (x >= 330.0 && x <= 340)){ // Handle single unit right positions
                 x = 187;
-            } 
+            }
             else if ((x >= -320.0 && x <= -310)
             || (x >= -160.0 && x <= -140)){ // Handle single unit left positions
                 x = -137;
             }
-            else if ((x >= 310.0 && x <= 320.0) 
+            else if ((x >= 310.0 && x <= 320.0)
             || (x >= 430.0 && x <= 440.0)
             || (x >= -50 && x <= 40)
             || (x >= 70 && x <= 80)) { // Handle dual unit different positions
@@ -489,7 +489,7 @@ cocos2d::Size lbGetViewPositionNew(float x, float y) {
 #if defined(__aarch64__)
     return lbGetViewPositionHooked(x, y);
 #endif
-    //LOGI("Size 1: %f, size 2: %f", sizes.width, sizes.height);            
+    //LOGI("Size 1: %f, size 2: %f", sizes.width, sizes.height);
 
     // Reimplement from scratch because arm is bugged (also this segfaults on arm64)
     auto director = getDirector((void *)0x00);
@@ -505,7 +505,7 @@ cocos2d::Size lbGetViewPositionNew(float x, float y) {
     //sizes.width = origin.x + x + (float)dirSize.width * 0.5;
     //sizes.height = origin.y + y + (float)dirSize.height * 0.5;
 
-    //LOGI("NEW size 1: %f, size 2: %f", sizes.width, sizes.height);  
+    //LOGI("NEW size 1: %f, size 2: %f", sizes.width, sizes.height);
     return sizes;
 }
 
@@ -561,11 +561,11 @@ void *hook_loop(void *arguments) {
 
     LOGI("Library location: %s", libLocation);
 
-    while(libBase == 0) { 
-        libBase = get_libBase(libName); 
-    }   
+    while(libBase == 0) {
+        libBase = get_libBase(libName);
+    }
     LOGI("Base address: %p", (void*)libBase);
-   
+
     // Hook resource endpoint
     void *resourceHook = lookup_symbol(libLocation, "_ZNK9UrlConfig8resourceENS_8Resource4TypeE"); // UrlConfig::resource(UrlConfig::Resource::Type)const
     if (DobbyHook(resourceHook, (void *)urlConfigResource, (void **)&urlConfigResourceHooked) == RS_SUCCESS) {
@@ -599,7 +599,7 @@ void *hook_loop(void *arguments) {
 
     //openMessageBoxPtr = lookup_symbol(libLocation, "_ZN10MessageBox4openEPKcS1_S1_RKSt8functionIFvPN7cocos2d3RefEEEb");
     //LOGI("Set openMessageBox ptr to %p", openMessageBoxPtr);
-    
+
     // For debugging
     //DobbyHook(lookup_symbol(libLocation, "_ZN5http212Http2Session6setURIERKSs"), (void *)setUriDebug, (void **)&setUriDebugOld); - crashes arm32 now.
 
@@ -641,8 +641,8 @@ void *hook_loop(void *arguments) {
 #endif
 
     // Hooks
-    void *cocos2dnodeSetPosition = lookup_symbol(libLocation, "_ZN7cocos2d4Node11setPositionERKNS_4Vec2E"); 
-    // cocos2d::Node::setPosition(cocos2d::Vec2 const&)    
+    void *cocos2dnodeSetPosition = lookup_symbol(libLocation, "_ZN7cocos2d4Node11setPositionERKNS_4Vec2E");
+    // cocos2d::Node::setPosition(cocos2d::Vec2 const&)
     if (cocos2dnodeSetPosition != nullptr) {
         LOGD("Found cocos2d::Node::setPosition at %p.", (void *)cocos2dnodeSetPosition);
         if (DobbyHook(cocos2dnodeSetPosition, (void *)setPositionNew, (void **)&setPositionHooked) == RS_SUCCESS) {
@@ -657,8 +657,8 @@ void *hook_loop(void *arguments) {
         initialization_error("Unable to hook cocos2d::Node::setPosition.");
         pthread_exit(NULL);
     }
-    
-    void *cocos2dlineLength = lookup_symbol(libLocation, "_ZN7cocos2d5Label15setMaxLineWidthEf"); 
+
+    void *cocos2dlineLength = lookup_symbol(libLocation, "_ZN7cocos2d5Label15setMaxLineWidthEf");
     // cocos2d::Label::setMaxLineWidth(float)
     if (cocos2dlineLength != nullptr) {
         LOGD("Found cocos2d::Label::setMaxLineWidth at %p.", (void *)cocos2dlineLength);
@@ -727,28 +727,28 @@ void *hook_loop(void *arguments) {
         initialization_error("Unable to hook cocos2d::Label::createWithTTF.");
         pthread_exit(NULL);
     }
-   
-    
+
+
     // Find key functions, TODO: Tidy up into 1 nice loop
 
-    void *storyMessageUnitTextStart = lookup_symbol(libLocation, "_ZN16StoryMessageUnit9textStartENS_11TextPosType13TextPosType__E"); 
+    void *storyMessageUnitTextStart = lookup_symbol(libLocation, "_ZN16StoryMessageUnit9textStartENS_11TextPosType13TextPosType__E");
     // StoryMessageUnit::textStart(StoryMessageUnit::TextPosType::TextPosType__)
     if (storyMessageUnitTextStart == nullptr) {
         initialization_error("Unable to find a pointer for StoryMessageUnit::textStart.");
         pthread_exit(NULL);
     }
     storyMessageUnitStartOffset = reinterpret_cast<uintptr_t>(storyMessageUnitTextStart);
-    
-    void *storyMessageUnitCreateMessageArea = lookup_symbol(libLocation, "_ZN16StoryMessageUnit17createMessageAreaENS_11TextPosType13TextPosType__E"); 
+
+    void *storyMessageUnitCreateMessageArea = lookup_symbol(libLocation, "_ZN16StoryMessageUnit17createMessageAreaENS_11TextPosType13TextPosType__E");
     // StoryMessageUnit::createMessageArea(StoryMessageUnit::TextPosType::TextPosType__)
     if (storyMessageUnitCreateMessageArea == nullptr) {
         initialization_error("Unable to find a pointer for StoryMessageUnit::createMessageArea.");
         pthread_exit(NULL);
     }
     storyMessageUnitCreateMessageAreaOffset = reinterpret_cast<uintptr_t>(storyMessageUnitCreateMessageArea);
-    
+
     void *storyLogUnitAddMessage = lookup_symbol(libLocation, "_ZN12StoryLogUnit10addMessageENS_11MessageType13MessageType__ERKNSt6__ndk112basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEE");
-    
+
     if (storyLogUnitAddMessage == nullptr) {
         initialization_error("Unable to find a pointer for StoryLogUnit::addMessage.");
         pthread_exit(NULL);
@@ -766,7 +766,7 @@ void *hook_loop(void *arguments) {
 
     void *storyCharaUnitonTextHome = lookup_symbol(libLocation, "_ZN14StoryCharaUnit10onTextHomeENSt6__ndk110shared_ptrI16StoryTurnCommandEEb");
     // StoryCharaUnit::onTextHome(std::shared_ptr<StoryTurnCommand>, bool)
-    
+
     if (storyCharaUnitonTextHome == nullptr) {
         initialization_error("Unable to find a pointer for StoryCharaUnit::onTextHome.");
         pthread_exit(NULL);
@@ -788,7 +788,7 @@ void *hook_loop(void *arguments) {
         initialization_error("Unable to find a pointer for StoryNarrationUnit::createLabel.");
         pthread_exit(NULL);
     }
-    
+
     storyNarrationUnitCreateLabelOffset = reinterpret_cast<uintptr_t>(storyNarrationUnitCreateLabelPtr);
 
     // Cocos functions
@@ -845,7 +845,7 @@ extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     gClassLoader = env->NewGlobalRef(env->CallObjectMethod(randomClass, getClassLoaderMethod));
     gFindClassMethod = env->GetMethodID(classLoaderClass, "findClass",
                                     "(Ljava/lang/String;)Ljava/lang/Class;");
-    
+
 
     if (dladdr((const void*) hook_main, &dlInfo))
     {
