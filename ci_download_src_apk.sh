@@ -9,23 +9,19 @@ verify_apk() {
     exit 2
 }
 
-UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
-
-# URL_PREFIX="https://jp.rika.ren/apk/Origin/com.aniplex.magireco"
-ARMV8_URL="https://files.catbox.moe/hhwlt8.apk"
-ARMV7_URL="https://files.catbox.moe/8gy17x.apk"
-
 . ci_versions/src_apk.sh
 
-rm -fr apk armv7apk totentanz
-mkdir -p apk armv7apk totentanz
+rm -fr apk armv7apk
+mkdir -p apk armv7apk
 
-curl -A "${UA}" -o out.apk -L "${ARMV8_URL}"
+releases=$(curl -s -H "Authorization: token ${PAT_TOKEN}" "https://api.github.com/repos/Puella-Care/en-apk/releases/tags/init" | jq -r '.assets[] | "\(.name) \(.url)"')
+ARMV8_URL=$(echo "${releases}" | awk '$1=="armv8.apk"{print $2}')
+ARMV7_URL=$(echo "${releases}" | awk '$1=="armv7.apk"{print $2}')
+
+[[ -z "${ARMV7_URL}" || -z "${ARMV8_URL}" ]] && echo "Missing apk" && exit 1
+
+curl -L -H "Authorization: token ${PAT_TOKEN}" -H "Accept: application/octet-stream" "${ARMV8_URL}" -o out.apk
 verify_apk out.apk "${SRCAPK_CERT_SHA256}" && mv out.apk "./apk/src_${SRCAPK_VER}.apk"
 
-curl -A "${UA}" -o out.apk -L "${ARMV7_URL}"
+curl -L -H "Authorization: token ${PAT_TOKEN}" -H "Accept: application/octet-stream" "${ARMV7_URL}" -o out.apk
 verify_apk out.apk "${SRCAPK_CERT_SHA256}" && mv out.apk "./armv7apk/armv7src_${SRCAPK_VER}.apk"
-
-# Download totentanz APK
-TOTENTANZ_URL="https://magi-reco.com/totentanz-1.0.0.apk"
-curl -A "${UA}" -o "./totentanz/totentanz-1.0.0.apk" -L "${TOTENTANZ_URL}"
