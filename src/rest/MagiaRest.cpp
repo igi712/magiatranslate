@@ -63,7 +63,7 @@ std::string MagiaRest::GetEndpointUrl() {
     return "";
 }
 
-std::string MAgiaRest::GetEndpointImportantMessage() {
+std::string MagiaRest::GetEndpointImportantMessage() {
     if (endpointJson != NULL && endpointJson.contains("importantMessage")) {
         return endpointJson["importantMessage"];
     }
