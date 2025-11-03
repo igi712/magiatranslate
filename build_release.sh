@@ -72,7 +72,6 @@ _create() {
 	echo "Removing existing build files..."
 	rm -rf "${BASEDIR}/build/app"
 	rm -rf "${BASEDIR}/build/armv7/app"
-	rm -rf "${BASEDIR}/build/totentanz"
 	echo "Running apktool..."
 	${JAVA} -jar "${BASEDIR}/build/${APKTOOL}" d "${SRCAPK}" -o "${BASEDIR}/build/app/"
 	mkdir -p "${BASEDIR}/build/app/smali_classes2/com/loadLib"
