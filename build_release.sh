@@ -115,6 +115,21 @@ _create() {
 	${PYTHON} "${BASEDIR}/buildassets.py"
 }
 
+_optimize() {
+	echo "Optimizing files for size..."
+	find "${BASEDIR}" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.plist' \) -print0 |
+	xargs -0 -n1 -P "$(nproc 2>/dev/null || getconf _NPROCESSORS_ONLN 2>/dev/null || echo 4)" -I{} bash -c '
+		file="${1}"
+		ext="${file##*.}"
+		ext="${ext,,}"
+		case "${ext}" in
+			png) zopflipng -y --lossy_8bit --lossy_transparent "${file}" "${file}" >/dev/null 2>&1 ;;
+			jpg|jpeg) jpegoptim --strip-all --all-progressive --quiet "${file}" >/dev/null 2>&1 ;;
+			plist) xmllint --noblanks --output "${file}" "${file}" >/dev/null 2>&1 ;;
+		esac
+	' _ {}
+}
+
 
 _build() {
 	echo "Copying new smali files..."
@@ -164,6 +179,8 @@ _build() {
 		echo "Copying libraries for ${tarch}..."
 		cp "${BASEDIR}/build/${tarch}/libuwasa.so" "${BASEDIR}/build/app/lib/${tarch}/libuwasa.so"
 	done
+
+	_optimize
 
 	echo "Rebuilding APK..."
 	${JAVA} -jar "${BASEDIR}/build/${APKTOOL}" b "${BASEDIR}/build/app/" -o "${RESULT}"
