@@ -5,6 +5,9 @@ on:
     tags: [ "*" ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
 
@@ -60,9 +63,9 @@ jobs:
         path: ./*.apk
     - name: Prerelease Build
       if: >-
-        startsWith(github.ref, 'refs/tags/') &&
+        github.ref_type == 'tag' &&
         endsWith(github.ref, '-prerelease')
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         prerelease: true
         files: |
@@ -70,9 +73,9 @@ jobs:
           ${{ env.FAILSAFE_APK }}
     - name: Release Build
       if: >-
-        startsWith(github.ref, 'refs/tags/') &&
+        github.ref_type == 'tag' &&
         !endsWith(github.ref, '-prerelease')
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         prerelease: false
         files: |
