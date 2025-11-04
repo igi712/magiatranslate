@@ -41,8 +41,8 @@ jobs:
         ENTRY_DOMAIN: ${{ secrets.ENTRY_DOMAIN }}
         API_DOMAIN: ${{ secrets.API_DOMAIN }}
       run: |
-        git ls-files | while read file; do
-          sed -i "s|@_@ENTRY_DOMAIN@_@|${ENTRY_DOMAIN}|g; s|@_@API_DOMAIN@_@|${API_DOMAIN}|g" "$file"
+        git ls-files -z | while IFS= read -r -d '' file; do
+          sed -i "s|@_@ENTRY_DOMAIN@_@|${ENTRY_DOMAIN}|g; s|@_@API_DOMAIN@_@|${API_DOMAIN}|g" "$file" || true
         done
     - name: Run ci_build.sh
       run: ./ci_build.sh
