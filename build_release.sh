@@ -128,7 +128,7 @@ _optimize() {
 			jpg|jpeg) jpegoptim --strip-all --all-progressive --quiet "${file}" >/dev/null 2>&1 ;;
 			xml|plist) xmllint --noblanks --output "${file}" "${file}" >/dev/null 2>&1 ;;
 			json|ExportJson) jq -c . "${file}" 2>/dev/null | sponge "${file}" ;;
-			so) file "${file}" | grep -q ELF && "${NDK}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip" --strip-unneeded "${file}" 2>/dev/null || true
+			so) file "${file}" | grep -q ELF && "${NDK}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip" --strip-unneeded "${file}" 2>/dev/null || true ;;
 		esac
 	' _ {}
 }
