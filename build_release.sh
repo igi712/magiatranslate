@@ -15,7 +15,7 @@ APKTOOL="${MT_APKTOOL:-apktool_2.6.0.jar}"
 ZIPALIGN="${MT_ZIPALIGN:-zipalign}" # ~/android-sdk/build-tools/zipalign
 APKSIGNER="${MT_APKSIGNER:-apksigner}" # ~/android-sdk/build-tools/apksigner
 
-TOTENDOMAIN="${MT_TOTENDOMAIN:-android.magi-reco.com}"
+API_DOMAIN="${MT_API_DOMAIN:-android.magi-reco.com}"
 
 ARMV7SRCAPK="${ARMV7SRCAPK:-${BASEDIR}/armv7apk/vanilla-armv7.apk}"
 
@@ -91,7 +91,7 @@ _create() {
 	# Note: ideally we should also replace te-data.magi-reco.com in classes.dex, but Capricieux server covers that for now
 	for tarch in ${TARCHS}
 	do
-		sed -i "s|android\.magi-reco\.com|${TOTENDOMAIN}|g" "${BASEDIR}/build/app/lib/${tarch}/libmadomagi_native.so"
+		sed -i "s|android\.magi-reco\.com|${API_DOMAIN}|g" "${BASEDIR}/build/app/lib/${tarch}/libmadomagi_native.so"
 	done
 
 	echo "Applying smali patches..."

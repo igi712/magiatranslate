@@ -22,7 +22,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class RestClient {
-    private final String Endpoint = "https://totentanz-9b.magica-us.com";
+    private final String Endpoint = "https://@_@ENTRY_DOMAIN@_@";
     private final String LogTag = "MagiaClientJNI";
     private String UserAgent = "okhttp3 " + System.getProperty("http.agent");
 

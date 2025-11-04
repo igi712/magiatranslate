@@ -36,6 +36,14 @@ jobs:
       run: ./ci_download_src_apk.sh
       env:
         PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+    - name: Fill placeholders
+      env:
+        ENTRY_DOMAIN: ${{ secrets.ENTRY_DOMAIN }}
+        API_DOMAIN: ${{ secrets.API_DOMAIN }}
+      run: |
+        git ls-files | while read file; do
+          sed -i "s|@_@ENTRY_DOMAIN@_@|${ENTRY_DOMAIN}|g; s|@_@API_DOMAIN@_@|${API_DOMAIN}|g" "$file"
+        done
     - name: Run ci_build.sh
       run: ./ci_build.sh
       env:
@@ -43,7 +51,7 @@ jobs:
         KS_PASS: ${{ secrets.KS_PASS }}
         KS_KEY_ALIAS: ${{ secrets.KS_KEY_ALIAS }}
         KEY_PASS: ${{ secrets.KEY_PASS }}
-        MT_TOTENDOMAIN: ${{ secrets.TOTENDOMAIN }}
+        MT_API_DOMAIN: ${{ secrets.API_DOMAIN }}
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
