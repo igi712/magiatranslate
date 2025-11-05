@@ -1,6 +1,6 @@
 # Magia Translate
 [![Discord Chat](https://img.shields.io/discord/665980614998097941.svg)](https://discord.gg/6vncnjj)  
-This is the client source code for Magia Translate, an English translation modification for Magia Record JP. It is licenced under the GNU General Public License v3.0.
+This is the client source code for Magia Translate, an English translation modification for Magia Record JP. It is licenced under the MIT license.
 
 ## How to build
 - Clone the repository including all submodules `git clone --recurse-submodules https://github.com/rayshift/magiatranslate`
